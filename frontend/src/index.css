@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-darkblue: #0f172a;
+  --color-primary: #1e40af;
+  --color-applied: #3b82f6; /* blue */
+  --color-viewed: #8b5cf6; /* purple */
+  --color-in-progress: #facc15; /* yellow */
+  --color-rejected: #ef4444; /* red */
+}
+
+/* global styling for dark blue background and table */
+body {
+  @apply bg-darkblue text-white min-h-screen;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.modal {
+  @apply bg-darkblue p-6 rounded-lg shadow-lg w-full max-w-md;
+}
+
+input:not([type="checkbox"]),
+select {
+  @apply w-full p-2 mb-2 rounded border border-gray-400 text-white bg-darkblue;
+}
+input[type="checkbox"] {
+  @apply w-4 h-4 mt-1; /* small checkbox with slight top margin */
+}
+select {
+  @apply bg-darkblue;
+}
+
+button {
+  @apply px-4 py-2 rounded;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.table-container {
+  @apply overflow-x-auto mt-4;
+}
+
+table {
+  @apply w-full table-auto border-collapse;
+}
+
+th,
+td {
+  @apply border border-gray-700 p-2 text-left;
+}
+
+@media (max-width: 768px) {
+  th,
+  td {
+    @apply text-sm p-1;
+  }
+}

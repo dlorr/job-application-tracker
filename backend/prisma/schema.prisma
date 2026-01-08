@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ApplicationStatus {
+  APPLIED
+  VIEWED
+  IN_PROGRESS
+  REJECTED
+  GHOSTED
+  COMPLETED
+}
+
+enum ApplicationProgress {
+  INITIAL_INTERVIEW
+  TECHNICAL_INTERVIEW
+  TECHNICAL_EXAM
+  FINAL_INTERVIEW
+  JOB_OFFER
+}
+
+model JobApplication {
+  id           String               @id @default(uuid())
+  company      String
+  jobPosition String
+  status       ApplicationStatus    @default(APPLIED)
+  progress     ApplicationProgress? 
+  interviewDate DateTime?
+  hasForm      Boolean              @default(false)
+  jobLink      String?
+  dateApplied  DateTime        
+  dateUpdated  DateTime             @updatedAt
+  createdAt    DateTime             @default(now())
+}
