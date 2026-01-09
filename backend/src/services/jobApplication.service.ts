@@ -4,10 +4,7 @@ import { NOT_FOUND } from "../constants/http";
 
 export const createApplication = (data: any) => {
   return prisma.jobApplication.create({
-    data: {
-      ...data,
-      dateApplied: new Date(),
-    },
+    data,
   });
 };
 

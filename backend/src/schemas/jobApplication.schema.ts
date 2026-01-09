@@ -6,6 +6,7 @@ export const createJobSchema = z.object({
   company: baseString,
   jobPosition: baseString,
   jobLink: z.string().trim().min(1).max(500),
+  dateApplied: z.coerce.date().min(1, "Date applied is required"),
 });
 
 export const updateJobSchema = z.object({
@@ -37,5 +38,6 @@ export const updateJobSchema = z.object({
     .optional(),
 
   interviewDate: z.coerce.date().optional(),
+  dateCompleted: z.coerce.date().optional(),
   hasForm: z.boolean().optional(),
 });

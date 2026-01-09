@@ -23,6 +23,7 @@ export type JobApplication = {
   interviewDate?: string;
   hasForm: boolean;
   dateApplied: string;
+  dateCompleted?: string;
   dateUpdated: string;
   createdAt: string;
 };
