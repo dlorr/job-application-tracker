@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,6 +14,7 @@ export const applicationSchema = z
     company: z.string().min(1, "Company is required").max(255),
     jobPosition: z.string().min(1, "Job Position is required").max(255),
     jobLink: z.string().min(1, "Job Link is required").max(500),
+    dateApplied: z.string().min(1, "Date applied is required"),
     status: z
       .enum([
         "APPLIED",
@@ -34,6 +35,7 @@ export const applicationSchema = z
       ])
       .optional(),
     interviewDate: z.string().optional(),
+    dateCompleted: z.string().optional(),
     hasForm: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
@@ -54,6 +56,13 @@ export const applicationSchema = z
           code: "custom",
         });
       }
+    }
+    if (data.status === "COMPLETED" && !data.dateCompleted) {
+      ctx.addIssue({
+        path: ["dateCompleted"],
+        message: "Date completed is required when status is Completed",
+        code: "custom",
+      });
     }
   });
 
@@ -79,11 +88,13 @@ export default function ApplicationModal({
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ApplicationForm>({
     resolver: zodResolver(applicationSchema),
   });
 
+  const prevStatusRef = useRef<ApplicationStatus | undefined>(undefined);
   const statusValue = watch("status");
 
   useEffect(() => {
@@ -95,31 +106,44 @@ export default function ApplicationModal({
         status: application.status,
         progress: application.progress || undefined,
         interviewDate: application.interviewDate?.split("T")[0] || undefined,
+        dateApplied: application.dateApplied?.split("T")[0],
+        dateCompleted: application.dateCompleted?.split("T")[0] || undefined,
         hasForm: application.hasForm,
       });
     }
   }, [application, reset]);
 
   useEffect(() => {
-    if (statusValue !== "IN_PROGRESS") {
-      // Clear progress and interviewDate when status is NOT IN_PROGRESS
-      reset(
-        {
-          ...watch(), // keep other form values
-          progress: undefined,
-          interviewDate: undefined,
-        },
-        { keepErrors: true, keepDirty: true } // keep other errors/dirty state
-      );
+    if (!isEditing) return;
+
+    const prevStatus = prevStatusRef.current;
+
+    // 🚫 Skip first run (modal open)
+    if (!prevStatus) {
+      prevStatusRef.current = statusValue;
+      return;
     }
-  }, [statusValue, reset, watch]);
+
+    // User actually changed status
+    if (statusValue !== "IN_PROGRESS") {
+      setValue("progress", undefined);
+      setValue("interviewDate", undefined);
+    }
+
+    if (statusValue !== "COMPLETED") {
+      setValue("dateCompleted", undefined);
+    }
+
+    prevStatusRef.current = statusValue;
+  }, [statusValue, isEditing, setValue]);
 
   const filteredStatuses = Object.keys(statusLabels).filter((s) => {
     const status = s as ApplicationStatus;
     if (!isEditing) return true;
-    if (statusValue === "VIEWED") return status !== "APPLIED";
-    if (statusValue === "IN_PROGRESS")
+    if (application.status === "VIEWED") return status !== "APPLIED";
+    if (application.status === "IN_PROGRESS")
       return !["APPLIED", "VIEWED"].includes(status);
+    if (application.status === "COMPLETED") return status === "COMPLETED";
     return true;
   }) as ApplicationStatus[];
 
@@ -134,36 +158,64 @@ export default function ApplicationModal({
         <h2 className="text-xl font-bold mb-4">
           {isEditing ? "Update" : "Add"} Application
         </h2>
-        <form onSubmit={handleSubmit(onSave)} className="flex flex-col">
-          <input
-            {...register("company")}
-            placeholder="Company"
-            className="mb-2"
-          />
+        <form onSubmit={handleSubmit(onSave)} className="flex flex-col gap-2">
+          <label className="text-sm font-medium">Company</label>
+          <input {...register("company")} className="mb-2" />
           {errors.company && (
-            <span className="text-red-500">{errors.company.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.company.message}
+            </span>
           )}
 
-          <input
-            {...register("jobPosition")}
-            placeholder="Job Position"
-            className="mb-2"
-          />
+          <label className="text-sm font-medium">Job Position</label>
+          <input {...register("jobPosition")} className="mb-2" />
           {errors.jobPosition && (
-            <span className="text-red-500">{errors.jobPosition.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.jobPosition.message}
+            </span>
           )}
 
-          <input
-            {...register("jobLink")}
-            placeholder="Job Link"
-            className="mb-2"
-          />
+          <label className="text-sm font-medium">Job Link</label>
+          <input {...register("jobLink")} className="mb-2" />
           {errors.jobLink && (
-            <span className="text-red-500">{errors.jobLink.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.jobLink.message}
+            </span>
+          )}
+
+          <label className="text-sm font-medium">Date Applied</label>
+          {isEditing ? (
+            <input
+              type="text"
+              disabled
+              value={
+                application?.dateApplied
+                  ? new Date(application.dateApplied).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      }
+                    )
+                  : ""
+              }
+              className="opacity-70 cursor-not-allowed"
+            />
+          ) : (
+            <>
+              <input type="date" {...register("dateApplied")} />
+              {errors.dateApplied && (
+                <span className="text-red-500 text-sm">
+                  {errors.dateApplied.message}
+                </span>
+              )}
+            </>
           )}
 
           {isEditing && (
             <>
+              <label className="text-sm font-medium">Status</label>
               <select {...register("status")} className="mb-2">
                 {filteredStatuses.map((s) => (
                   <option key={s} value={s}>
@@ -174,6 +226,7 @@ export default function ApplicationModal({
 
               {statusValue === "IN_PROGRESS" && (
                 <>
+                  <label className="text-sm font-medium">Progress</label>
                   <select {...register("progress")} className="mb-2">
                     {Object.keys(progressLabels).map((p) => {
                       const progress = p as ApplicationProgress;
@@ -185,27 +238,49 @@ export default function ApplicationModal({
                     })}
                   </select>
                   {errors.progress && (
-                    <span className="text-red-500">
+                    <span className="text-red-500 text-sm">
                       {errors.progress.message}
                     </span>
                   )}
 
+                  <label className="text-sm font-medium">Interview Date</label>
                   <input
                     type="date"
                     {...register("interviewDate")}
                     className="mb-2"
                   />
                   {errors.interviewDate && (
-                    <span className="text-red-500">
+                    <span className="text-red-500 text-sm">
                       {errors.interviewDate.message}
                     </span>
                   )}
                 </>
               )}
-              <label className="flex items-center space-x-2 mb-2">
-                <input type="checkbox" {...register("hasForm")} />
-                <span>Has Form</span>
-              </label>
+              {statusValue === "COMPLETED" && (
+                <>
+                  <label className="text-sm font-medium">Date Completed</label>
+                  <input
+                    type="date"
+                    {...register("dateCompleted")}
+                    className="mb-2"
+                  />
+                  {errors.dateCompleted && (
+                    <span className="text-red-500 text-sm">
+                      {errors.dateCompleted.message}
+                    </span>
+                  )}
+                </>
+              )}
+              {isEditing && application?.hasForm ? (
+                <p className="text-xs text-gray-400 mt-1">
+                  This application already has a form attached.
+                </p>
+              ) : (
+                <label className="flex items-center gap-2 mt-2">
+                  <span className="text-sm">Has Form</span>
+                  <input type="checkbox" {...register("hasForm")} />
+                </label>
+              )}
             </>
           )}
 

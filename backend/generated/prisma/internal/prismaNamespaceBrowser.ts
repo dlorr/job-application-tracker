@@ -80,6 +80,7 @@ export const JobApplicationScalarFieldEnum = {
   hasForm: 'hasForm',
   jobLink: 'jobLink',
   dateApplied: 'dateApplied',
+  dateCompleted: 'dateCompleted',
   dateUpdated: 'dateUpdated',
   createdAt: 'createdAt'
 } as const

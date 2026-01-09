@@ -34,6 +34,7 @@ export type JobApplicationMinAggregateOutputType = {
   hasForm: boolean | null
   jobLink: string | null
   dateApplied: Date | null
+  dateCompleted: Date | null
   dateUpdated: Date | null
   createdAt: Date | null
 }
@@ -48,6 +49,7 @@ export type JobApplicationMaxAggregateOutputType = {
   hasForm: boolean | null
   jobLink: string | null
   dateApplied: Date | null
+  dateCompleted: Date | null
   dateUpdated: Date | null
   createdAt: Date | null
 }
@@ -62,6 +64,7 @@ export type JobApplicationCountAggregateOutputType = {
   hasForm: number
   jobLink: number
   dateApplied: number
+  dateCompleted: number
   dateUpdated: number
   createdAt: number
   _all: number
@@ -78,6 +81,7 @@ export type JobApplicationMinAggregateInputType = {
   hasForm?: true
   jobLink?: true
   dateApplied?: true
+  dateCompleted?: true
   dateUpdated?: true
   createdAt?: true
 }
@@ -92,6 +96,7 @@ export type JobApplicationMaxAggregateInputType = {
   hasForm?: true
   jobLink?: true
   dateApplied?: true
+  dateCompleted?: true
   dateUpdated?: true
   createdAt?: true
 }
@@ -106,6 +111,7 @@ export type JobApplicationCountAggregateInputType = {
   hasForm?: true
   jobLink?: true
   dateApplied?: true
+  dateCompleted?: true
   dateUpdated?: true
   createdAt?: true
   _all?: true
@@ -193,6 +199,7 @@ export type JobApplicationGroupByOutputType = {
   hasForm: boolean
   jobLink: string | null
   dateApplied: Date
+  dateCompleted: Date | null
   dateUpdated: Date
   createdAt: Date
   _count: JobApplicationCountAggregateOutputType | null
@@ -228,6 +235,7 @@ export type JobApplicationWhereInput = {
   hasForm?: Prisma.BoolFilter<"JobApplication"> | boolean
   jobLink?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   dateApplied?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
+  dateCompleted?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
   dateUpdated?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
 }
@@ -242,6 +250,7 @@ export type JobApplicationOrderByWithRelationInput = {
   hasForm?: Prisma.SortOrder
   jobLink?: Prisma.SortOrderInput | Prisma.SortOrder
   dateApplied?: Prisma.SortOrder
+  dateCompleted?: Prisma.SortOrderInput | Prisma.SortOrder
   dateUpdated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -259,6 +268,7 @@ export type JobApplicationWhereUniqueInput = Prisma.AtLeast<{
   hasForm?: Prisma.BoolFilter<"JobApplication"> | boolean
   jobLink?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   dateApplied?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
+  dateCompleted?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
   dateUpdated?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
 }, "id">
@@ -273,6 +283,7 @@ export type JobApplicationOrderByWithAggregationInput = {
   hasForm?: Prisma.SortOrder
   jobLink?: Prisma.SortOrderInput | Prisma.SortOrder
   dateApplied?: Prisma.SortOrder
+  dateCompleted?: Prisma.SortOrderInput | Prisma.SortOrder
   dateUpdated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.JobApplicationCountOrderByAggregateInput
@@ -293,6 +304,7 @@ export type JobApplicationScalarWhereWithAggregatesInput = {
   hasForm?: Prisma.BoolWithAggregatesFilter<"JobApplication"> | boolean
   jobLink?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
   dateApplied?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
+  dateCompleted?: Prisma.DateTimeNullableWithAggregatesFilter<"JobApplication"> | Date | string | null
   dateUpdated?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
 }
@@ -307,6 +319,7 @@ export type JobApplicationCreateInput = {
   hasForm?: boolean
   jobLink?: string | null
   dateApplied: Date | string
+  dateCompleted?: Date | string | null
   dateUpdated?: Date | string
   createdAt?: Date | string
 }
@@ -321,6 +334,7 @@ export type JobApplicationUncheckedCreateInput = {
   hasForm?: boolean
   jobLink?: string | null
   dateApplied: Date | string
+  dateCompleted?: Date | string | null
   dateUpdated?: Date | string
   createdAt?: Date | string
 }
@@ -335,6 +349,7 @@ export type JobApplicationUpdateInput = {
   hasForm?: Prisma.BoolFieldUpdateOperationsInput | boolean
   jobLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateApplied?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateCompleted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,6 +364,7 @@ export type JobApplicationUncheckedUpdateInput = {
   hasForm?: Prisma.BoolFieldUpdateOperationsInput | boolean
   jobLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateApplied?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateCompleted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -363,6 +379,7 @@ export type JobApplicationCreateManyInput = {
   hasForm?: boolean
   jobLink?: string | null
   dateApplied: Date | string
+  dateCompleted?: Date | string | null
   dateUpdated?: Date | string
   createdAt?: Date | string
 }
@@ -377,6 +394,7 @@ export type JobApplicationUpdateManyMutationInput = {
   hasForm?: Prisma.BoolFieldUpdateOperationsInput | boolean
   jobLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateApplied?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateCompleted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +409,7 @@ export type JobApplicationUncheckedUpdateManyInput = {
   hasForm?: Prisma.BoolFieldUpdateOperationsInput | boolean
   jobLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateApplied?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateCompleted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -405,6 +424,7 @@ export type JobApplicationCountOrderByAggregateInput = {
   hasForm?: Prisma.SortOrder
   jobLink?: Prisma.SortOrder
   dateApplied?: Prisma.SortOrder
+  dateCompleted?: Prisma.SortOrder
   dateUpdated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -419,6 +439,7 @@ export type JobApplicationMaxOrderByAggregateInput = {
   hasForm?: Prisma.SortOrder
   jobLink?: Prisma.SortOrder
   dateApplied?: Prisma.SortOrder
+  dateCompleted?: Prisma.SortOrder
   dateUpdated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -433,6 +454,7 @@ export type JobApplicationMinOrderByAggregateInput = {
   hasForm?: Prisma.SortOrder
   jobLink?: Prisma.SortOrder
   dateApplied?: Prisma.SortOrder
+  dateCompleted?: Prisma.SortOrder
   dateUpdated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -477,6 +499,7 @@ export type JobApplicationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   hasForm?: boolean
   jobLink?: boolean
   dateApplied?: boolean
+  dateCompleted?: boolean
   dateUpdated?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["jobApplication"]>
@@ -491,6 +514,7 @@ export type JobApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   hasForm?: boolean
   jobLink?: boolean
   dateApplied?: boolean
+  dateCompleted?: boolean
   dateUpdated?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["jobApplication"]>
@@ -505,6 +529,7 @@ export type JobApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   hasForm?: boolean
   jobLink?: boolean
   dateApplied?: boolean
+  dateCompleted?: boolean
   dateUpdated?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["jobApplication"]>
@@ -519,11 +544,12 @@ export type JobApplicationSelectScalar = {
   hasForm?: boolean
   jobLink?: boolean
   dateApplied?: boolean
+  dateCompleted?: boolean
   dateUpdated?: boolean
   createdAt?: boolean
 }
 
-export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company" | "jobPosition" | "status" | "progress" | "interviewDate" | "hasForm" | "jobLink" | "dateApplied" | "dateUpdated" | "createdAt", ExtArgs["result"]["jobApplication"]>
+export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "company" | "jobPosition" | "status" | "progress" | "interviewDate" | "hasForm" | "jobLink" | "dateApplied" | "dateCompleted" | "dateUpdated" | "createdAt", ExtArgs["result"]["jobApplication"]>
 
 export type $JobApplicationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "JobApplication"
@@ -538,6 +564,7 @@ export type $JobApplicationPayload<ExtArgs extends runtime.Types.Extensions.Inte
     hasForm: boolean
     jobLink: string | null
     dateApplied: Date
+    dateCompleted: Date | null
     dateUpdated: Date
     createdAt: Date
   }, ExtArgs["result"]["jobApplication"]>
@@ -972,6 +999,7 @@ export interface JobApplicationFieldRefs {
   readonly hasForm: Prisma.FieldRef<"JobApplication", 'Boolean'>
   readonly jobLink: Prisma.FieldRef<"JobApplication", 'String'>
   readonly dateApplied: Prisma.FieldRef<"JobApplication", 'DateTime'>
+  readonly dateCompleted: Prisma.FieldRef<"JobApplication", 'DateTime'>
   readonly dateUpdated: Prisma.FieldRef<"JobApplication", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"JobApplication", 'DateTime'>
 }

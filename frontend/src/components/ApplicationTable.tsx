@@ -34,6 +34,8 @@ export default function ApplicationTable({
             <th>Status</th>
             <th>Progress</th>
             <th>Interview Date</th>
+            <th>Completed Date</th>
+            <th>Applied Date</th>
             <th>Has Form</th>
             <th>Actions</th>
           </tr>
@@ -54,7 +56,7 @@ export default function ApplicationTable({
                 <td>{app.jobPosition}</td>
                 <td>
                   <a href={app.jobLink} target="_blank" className="underline">
-                    {app.jobLink}
+                    Go to Job Link
                   </a>
                 </td>
                 <td>{statusLabels[app.status]}</td>
@@ -62,20 +64,26 @@ export default function ApplicationTable({
                 <td>
                   {app.interviewDate ? formatDate(app.interviewDate) : "-"}
                 </td>
+                <td>
+                  {app.dateCompleted ? formatDate(app.dateCompleted) : "-"}
+                </td>
+                <td>{app.dateApplied ? formatDate(app.dateApplied) : "-"}</td>
                 <td>{app.hasForm ? "Yes" : "No"}</td>
                 <td className="space-x-2">
-                  <button
-                    onClick={() => onEdit(app)}
-                    className="bg-yellow-500 px-2 py-1 rounded"
-                  >
-                    Update
-                  </button>
-                  <button
+                  {app.status !== "COMPLETED" && (
+                    <span
+                      onClick={() => onEdit(app)}
+                      className="text-yellow-400 underline cursor-pointer"
+                    >
+                      Update
+                    </span>
+                  )}
+                  <span
                     onClick={() => onDelete(app)}
-                    className="bg-red-600 px-2 py-1 rounded text-white"
+                    className="text-red-500 underline cursor-pointer"
                   >
-                    Delete
-                  </button>
+                    Remove
+                  </span>
                 </td>
               </tr>
             ))

@@ -15,6 +15,7 @@ CREATE TABLE "JobApplication" (
     "hasForm" BOOLEAN NOT NULL DEFAULT false,
     "jobLink" TEXT,
     "dateApplied" TIMESTAMP(3) NOT NULL,
+    "dateCompleted" TIMESTAMP(3),
     "dateUpdated" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

@@ -49,7 +49,9 @@ table {
   @apply w-full table-auto border-collapse;
 }
 
-th,
+th {
+  @apply border border-gray-700 p-2 text-center;
+}
 td {
   @apply border border-gray-700 p-2 text-left;
 }
