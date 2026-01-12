@@ -8,10 +8,20 @@ export const createApplication = (data: any) => {
   });
 };
 
-export const getAllApplications = () => {
-  return prisma.jobApplication.findMany({
-    orderBy: { dateApplied: "desc" },
-  });
+export const getAllApplications = async (offset: number, limit: number) => {
+  const [data, total] = await Promise.all([
+    prisma.jobApplication.findMany({
+      skip: offset,
+      take: limit,
+      orderBy: { dateApplied: "desc" },
+    }),
+    prisma.jobApplication.count(),
+  ]);
+
+  return {
+    data,
+    total,
+  };
 };
 
 export const getApplicationById = async (id: string) => {

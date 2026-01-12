@@ -15,8 +15,11 @@ export const create = async (
   }
 };
 
-export const findAll = async (_: Request, res: Response) => {
-  const jobs = await service.getAllApplications();
+export const findAll = async (req: Request, res: Response) => {
+  const offset = Number(req.query.offset) || 0;
+  const limit = Number(req.query.limit) || 10;
+
+  const jobs = await service.getAllApplications(offset, limit);
   res.json(jobs);
 };
 
