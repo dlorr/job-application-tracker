@@ -1,5 +1,10 @@
 import type { JobApplication } from "../types/jobApplication";
-import { statusLabels, progressLabels } from "../constants/select";
+import {
+  statusLabels,
+  progressLabels,
+  statusColors,
+} from "../constants/select";
+import { getJobLinkLabel } from "../utils/jobLink";
 
 type Props = {
   applications: JobApplication[];
@@ -55,11 +60,18 @@ export default function ApplicationTable({
                 <td>{app.company}</td>
                 <td>{app.jobPosition}</td>
                 <td>
-                  <a href={app.jobLink} target="_blank" className="underline">
-                    Go to Job Link
+                  <a
+                    href={app.jobLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-blue-400"
+                  >
+                    {getJobLinkLabel(app.jobLink)}
                   </a>
                 </td>
-                <td>{statusLabels[app.status]}</td>
+                <td className={statusColors[app.status]}>
+                  {statusLabels[app.status]}
+                </td>
                 <td>{app.progress ? progressLabels[app.progress] : "-"}</td>
                 <td>
                   {app.interviewDate ? formatDate(app.interviewDate) : "-"}

@@ -12,24 +12,23 @@ import {
 } from "../api/jobApplications";
 import type { JobApplication } from "../types/jobApplication";
 
-const PAGE_SIZE = 5;
-
 export default function ApplicationPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { data: applications = [], isLoading } = useQuery({
-    queryKey: ["applications", page],
-    queryFn: () => getApplications(page, PAGE_SIZE),
-    staleTime: 0, // always treat data as stale
-    refetchOnMount: "always", // refetch when component mounts
-    initialData: () =>
-      queryClient.getQueryData(["applications", page - 1]) || [],
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["applications", page, pageSize],
+    queryFn: () => getApplications(page, pageSize),
   });
+
+  const applications = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
 
   const addUpdateMutation = useMutation({
     mutationFn: async ({ id, data }: any) => {
@@ -65,19 +64,39 @@ export default function ApplicationPage() {
   return (
     <div className="p-6 min-h-screen">
       <h1 className="text-3xl font-bold mb-4 text-white">Job Applications</h1>
-      <button
-        onClick={() => {
-          setSelectedApp(null);
-          setModalOpen(true);
-        }}
-        className="bg-primary px-4 py-2 rounded mb-4"
-      >
-        Add Application
-      </button>
+      <div className="mb-4 flex flex-col gap-2">
+        {/* Add Application Button */}
+        <button
+          onClick={() => {
+            setSelectedApp(null);
+            setModalOpen(true);
+          }}
+          className="bg-primary px-4 py-2 rounded w-max mb-2"
+        >
+          Add Application
+        </button>
 
+        {/* Page Size Selector */}
+        <div className="inline-flex items-center gap-2 w-max">
+          <span className="text-white whitespace-nowrap">Page Size:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setPage(1);
+            }}
+            className="border px-2 py-1 rounded w-20 bg-white text-black"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
+      </div>
       <ApplicationTable
         applications={applications}
-        isLoading={isLoading}
+        isLoading={isLoading || isFetching}
         onEdit={(app) => {
           setSelectedApp(app);
           setModalOpen(true);
@@ -89,14 +108,23 @@ export default function ApplicationPage() {
       />
 
       {/* Pagination */}
-      <div className="mt-4 flex justify-between">
-        <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+      <div className="mt-4 flex justify-between items-center text-white">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((p) => p - 1)}
+          className="px-3 py-1 bg-slate-700 rounded disabled:opacity-40"
+        >
           Prev
         </button>
-        <span>Page {page}</span>
+
+        <span>
+          Page {page} of {totalPages}
+        </span>
+
         <button
-          disabled={applications.length < PAGE_SIZE}
+          disabled={page === totalPages}
           onClick={() => setPage((p) => p + 1)}
+          className="px-3 py-1 bg-slate-700 rounded disabled:opacity-40"
         >
           Next
         </button>
