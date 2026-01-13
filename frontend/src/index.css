@@ -3,15 +3,16 @@
 @theme {
   --color-darkblue: #0f172a;
   --color-primary: #1e40af;
-  --color-applied: #3b82f6; /* blue */
-  --color-viewed: #8b5cf6; /* purple */
-  --color-in-progress: #facc15; /* yellow */
-  --color-rejected: #ef4444; /* red */
+  --color-gray: #24282d;
+  --color-darkgray: #1f2226;
+  --color-lightgray: #2f3338;
+  --color-teal: #32886b;
+  --color-red: #e5514d;
 }
 
 /* global styling for dark blue background and table */
 body {
-  @apply bg-darkblue text-white min-h-screen;
+  @apply bg-darkgray text-white min-h-screen;
 }
 
 .modal-overlay {
@@ -19,26 +20,42 @@ body {
 }
 
 .modal {
-  @apply bg-darkblue p-6 rounded-lg shadow-lg w-full max-w-md;
+  @apply bg-darkgray p-6 rounded-lg shadow-lg w-full max-w-md;
 }
 
 input:not([type="checkbox"]),
 select {
-  @apply w-full p-2 mb-2 rounded border border-gray-400 text-white bg-darkblue;
+  @apply w-full p-2 mb-2 rounded border border-gray-400 text-white bg-lightgray;
 }
 input[type="checkbox"] {
   @apply w-4 h-4 mt-1; /* small checkbox with slight top margin */
-}
-select {
-  @apply bg-darkblue;
 }
 
 button {
   @apply px-4 py-2 rounded;
 }
 
+.button-primary {
+  @apply bg-teal hover:opacity-80
+           disabled:opacity-50 disabled:hover:opacity-50 disabled:cursor-not-allowed;
+}
+
+.button-secondary {
+  @apply bg-lightgray hover:opacity-80
+   disabled:opacity-50 disabled:hover:opacity-50 disabled:cursor-not-allowed;
+}
+
+.button-delete {
+  @apply bg-red hover:opacity-80
+   disabled:opacity-50 disabled:hover:opacity-50 disabled:cursor-not-allowed;
+}
+
 button:hover {
   cursor: pointer;
+}
+
+.spinner {
+  @apply h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin;
 }
 
 .table-container {
@@ -46,11 +63,11 @@ button:hover {
 }
 
 table {
-  @apply w-full table-auto border-collapse;
+  @apply w-full table-auto border-collapse bg-gray;
 }
 
 th {
-  @apply border border-gray-700 p-2 text-center;
+  @apply border border-gray-700 p-2 text-center bg-lightgray;
 }
 td {
   @apply border border-gray-700 p-2 text-left;

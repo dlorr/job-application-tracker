@@ -289,18 +289,16 @@ export default function ApplicationModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="bg-gray-500 px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className="button-secondary px-4 py-2"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-primary text-white px-4 py-2 rounded flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="button-primary px-4 py-2 flex items-center justify-center gap-2"
             >
-              {isLoading && (
-                <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              )}
+              {isLoading && <span className="spinner" />}
 
               {isLoading
                 ? isEditing

@@ -1,10 +1,7 @@
 import type { JobApplication } from "../types/jobApplication";
-import {
-  statusLabels,
-  progressLabels,
-  statusColors,
-} from "../constants/select";
+import { statusLabels, progressLabels } from "../constants/select";
 import { getJobLinkLabel } from "../utils/jobLink";
+import { statusColors } from "../constants/statusColors";
 
 type Props = {
   applications: JobApplication[];
@@ -85,14 +82,14 @@ export default function ApplicationTable({
                   {app.status !== "COMPLETED" && (
                     <span
                       onClick={() => onEdit(app)}
-                      className="text-yellow-400 underline cursor-pointer"
+                      className="text-yellow-200 underline cursor-pointer"
                     >
                       Update
                     </span>
                   )}
                   <span
                     onClick={() => onDelete(app)}
-                    className="text-red-500 underline cursor-pointer"
+                    className="text-red underline cursor-pointer"
                   >
                     Remove
                   </span>

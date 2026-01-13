@@ -10,10 +10,7 @@ export default function MessageModal({
       <div className="modal">
         <p className="mb-4">{message}</p>
         <div className="flex justify-end">
-          <button
-            onClick={onClose}
-            className="bg-primary hover:bg-blue-700 text-white"
-          >
+          <button onClick={onClose} className="button-primary">
             OK
           </button>
         </div>
