@@ -63,29 +63,18 @@ export default function ApplicationPage() {
 
   return (
     <div className="p-6 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4 text-white">Job Applications</h1>
-      <div className="mb-4 flex flex-col gap-2">
-        {/* Add Application Button */}
-        <button
-          onClick={() => {
-            setSelectedApp(null);
-            setModalOpen(true);
-          }}
-          className="bg-primary px-4 py-2 rounded w-max mb-2"
-        >
-          Add Application
-        </button>
-
+      <h1 className="text-3xl font-bold mb-4 text-center">Job Applications</h1>
+      <div className="mb-4 flex items-start justify-between gap-4">
         {/* Page Size Selector */}
         <div className="inline-flex items-center gap-2 w-max">
-          <span className="text-white whitespace-nowrap">Page Size:</span>
+          <span className="whitespace-nowrap">Page Size:</span>
           <select
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
               setPage(1);
             }}
-            className="border px-2 py-1 rounded w-20 bg-white text-black"
+            className="border px-2 py-1 rounded w-20"
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -93,6 +82,17 @@ export default function ApplicationPage() {
             <option value={50}>50</option>
           </select>
         </div>
+
+        {/* Add Application Button */}
+        <button
+          onClick={() => {
+            setSelectedApp(null);
+            setModalOpen(true);
+          }}
+          className="button-primary px-4 py-2 rounded w-max mb-2"
+        >
+          Add Application
+        </button>
       </div>
       <ApplicationTable
         applications={applications}
@@ -108,11 +108,11 @@ export default function ApplicationPage() {
       />
 
       {/* Pagination */}
-      <div className="mt-4 flex justify-between items-center text-white">
+      <div className="mt-4 flex justify-between items-center">
         <button
           disabled={page === 1}
           onClick={() => setPage((p) => p - 1)}
-          className="px-3 py-1 bg-slate-700 rounded disabled:opacity-40"
+          className="button-secondary px-3 py-1 disabled:opacity-40"
         >
           Prev
         </button>
@@ -124,7 +124,7 @@ export default function ApplicationPage() {
         <button
           disabled={page === totalPages}
           onClick={() => setPage((p) => p + 1)}
-          className="px-3 py-1 bg-slate-700 rounded disabled:opacity-40"
+          className="button-primary px-3 py-1 disabled:opacity-40"
         >
           Next
         </button>

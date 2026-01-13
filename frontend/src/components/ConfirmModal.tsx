@@ -19,18 +19,16 @@ export default function ConfirmModal({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="bg-gray-500 px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            className="button-secondary px-4 py-2"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="button-delete px-4 py-2 flex items-center justify-center gap-2"
           >
-            {isLoading && (
-              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            )}
+            {isLoading && <span className="spinner" />}
             {isLoading ? "Deleting..." : "Confirm"}
           </button>
         </div>
