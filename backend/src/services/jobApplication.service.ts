@@ -1,6 +1,7 @@
 import { prisma } from "../prisma";
 import { ApiError } from "../errors/apiError";
 import { NOT_FOUND } from "../constants/http";
+import { GetAllParams, SortableFields } from "../types/getAllTypes";
 
 export const createApplication = (data: any) => {
   return prisma.jobApplication.create({
@@ -8,12 +9,29 @@ export const createApplication = (data: any) => {
   });
 };
 
-export const getAllApplications = async (offset: number, limit: number) => {
+export const getAllApplications = async ({
+  offset,
+  limit,
+  sortBy,
+  sortOrder,
+}: GetAllParams) => {
+  const allowedSortFields: SortableFields[] = [
+    "createdAt",
+    "dateApplied",
+    "interviewDate",
+    "dateCompleted",
+  ];
+  const safeSortBy: SortableFields = allowedSortFields.includes(
+    sortBy as SortableFields
+  )
+    ? (sortBy as SortableFields)
+    : "createdAt";
+
   const [data, total] = await Promise.all([
     prisma.jobApplication.findMany({
       skip: offset,
       take: limit,
-      orderBy: { dateApplied: "desc" },
+      orderBy: { [safeSortBy]: sortOrder },
     }),
     prisma.jobApplication.count(),
   ]);

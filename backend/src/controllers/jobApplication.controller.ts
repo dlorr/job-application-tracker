@@ -16,10 +16,19 @@ export const create = async (
 };
 
 export const findAll = async (req: Request, res: Response) => {
-  const offset = Number(req.query.offset) || 0;
-  const limit = Number(req.query.limit) || 10;
+  const page = Number(req.query.page) || 1;
+  const pageSize = Number(req.query.pageSize) || 10;
+  const offset = (page - 1) * pageSize;
 
-  const jobs = await service.getAllApplications(offset, limit);
+  const sortBy = (req.query.sortBy as string) || "createdAt";
+  const sortOrder = (req.query.sortOrder as "asc" | "desc") || "desc";
+
+  const jobs = await service.getAllApplications({
+    offset,
+    limit: pageSize,
+    sortBy,
+    sortOrder,
+  });
   res.json(jobs);
 };
 

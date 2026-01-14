@@ -3,11 +3,19 @@ import { statusLabels, progressLabels } from "../constants/select";
 import { getJobLinkLabel } from "../utils/jobLink";
 import { statusColors } from "../constants/statusColors";
 
+type SortColumn =
+  | "interviewDate"
+  | "dateCompleted"
+  | "dateApplied"
+  | "createdAt";
 type Props = {
   applications: JobApplication[];
   isLoading: boolean;
   onEdit: (app: JobApplication) => void;
   onDelete: (app: JobApplication) => void;
+  sortBy: string;
+  sortOrder: "asc" | "desc";
+  onSort: (column: SortColumn) => void;
 };
 
 export default function ApplicationTable({
@@ -15,6 +23,9 @@ export default function ApplicationTable({
   isLoading,
   onEdit,
   onDelete,
+  sortBy,
+  sortOrder,
+  onSort,
 }: Props) {
   // Date formatter
   const formatDate = (dateStr: string) => {
@@ -35,9 +46,53 @@ export default function ApplicationTable({
             <th>Job Link</th>
             <th>Status</th>
             <th>Progress</th>
-            <th>Interview Date</th>
-            <th>Completed Date</th>
-            <th>Applied Date</th>
+
+            <th
+              className="cursor-pointer select-none"
+              onClick={() => onSort("interviewDate")}
+            >
+              Interview Date{" "}
+              {sortBy === "interviewDate" ? (
+                sortOrder === "asc" ? (
+                  <span>↑</span>
+                ) : (
+                  <span>↓</span>
+                )
+              ) : (
+                <span className="text-gray-400">⇅</span>
+              )}
+            </th>
+
+            <th
+              className="cursor-pointer select-none"
+              onClick={() => onSort("dateCompleted")}
+            >
+              Completed Date{" "}
+              {sortBy === "dateCompleted" ? (
+                sortOrder === "asc" ? (
+                  <span>↑</span>
+                ) : (
+                  <span>↓</span>
+                )
+              ) : (
+                <span className="text-gray-400">⇅</span>
+              )}
+            </th>
+            <th
+              className="cursor-pointer select-none"
+              onClick={() => onSort("dateApplied")}
+            >
+              Applied Date{" "}
+              {sortBy === "dateApplied" ? (
+                sortOrder === "asc" ? (
+                  <span>↑</span>
+                ) : (
+                  <span>↓</span>
+                )
+              ) : (
+                <span className="text-gray-400">⇅</span> // sortable indicator when not active
+              )}
+            </th>
             <th>Has Form</th>
             <th>Actions</th>
           </tr>
