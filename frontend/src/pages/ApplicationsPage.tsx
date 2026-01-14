@@ -20,15 +20,29 @@ export default function ApplicationPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [sortBy, setSortBy] = useState<
+    "createdAt" | "dateApplied" | "interviewDate" | "dateCompleted"
+  >("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["applications", page, pageSize],
-    queryFn: () => getApplications(page, pageSize),
+    queryKey: ["applications", page, pageSize, sortBy, sortOrder],
+    queryFn: () => getApplications(page, pageSize, sortBy, sortOrder),
   });
 
   const applications = data?.data ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.ceil(total / pageSize);
+
+  const handleSort = (column: typeof sortBy) => {
+    if (sortBy === column) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(column);
+      setSortOrder("asc");
+    }
+    setPage(1);
+  };
 
   const addUpdateMutation = useMutation({
     mutationFn: async ({ id, data }: any) => {
@@ -105,6 +119,9 @@ export default function ApplicationPage() {
           setSelectedApp(app);
           setConfirmOpen(true);
         }}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSort={handleSort}
       />
 
       {/* Pagination */}

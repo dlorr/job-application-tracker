@@ -10,11 +10,14 @@ export const api = axios.create({
   },
 });
 
-export const getApplications = async (page: number, limit: number) => {
-  const offset = (page - 1) * limit;
-
+export const getApplications = async (
+  page: number,
+  pageSize: number,
+  sortBy = "createdAt",
+  sortOrder: "asc" | "desc" = "desc"
+) => {
   const res = await api.get("/", {
-    params: { offset, limit },
+    params: { page, pageSize, sortBy, sortOrder },
   });
 
   return res.data as {
