@@ -1,9 +1,13 @@
 import { prisma } from "../prisma";
 import { ApiError } from "../errors/apiError";
 import { NOT_FOUND } from "../constants/http";
-import { GetAllParams, SortableFields } from "../types/getAllTypes";
+import { GetAllParams } from "../types/getAllApplications";
+import { SORTABLE_FIELDS } from "../constants/sortableFields";
+import { CreateJobApplicationDTO } from "../dtos/createJobApplication.dto";
+import { Prisma } from "@prisma/client";
+import { UpdateJobApplicationDTO } from "../dtos/updateJobApplication.dto";
 
-export const createApplication = (data: any) => {
+export const createApplication = (data: CreateJobApplicationDTO) => {
   return prisma.jobApplication.create({
     data,
   });
@@ -15,23 +19,19 @@ export const getAllApplications = async ({
   sortBy,
   sortOrder,
 }: GetAllParams) => {
-  const allowedSortFields: SortableFields[] = [
-    "createdAt",
-    "dateApplied",
-    "interviewDate",
-    "dateCompleted",
-  ];
-  const safeSortBy: SortableFields = allowedSortFields.includes(
-    sortBy as SortableFields
-  )
-    ? (sortBy as SortableFields)
-    : "createdAt";
+  const allowedSortFields = Object.values(SORTABLE_FIELDS);
+
+  const safeSortBy = allowedSortFields.includes(sortBy)
+    ? sortBy
+    : SORTABLE_FIELDS.CREATED_AT;
 
   const [data, total] = await Promise.all([
     prisma.jobApplication.findMany({
       skip: offset,
       take: limit,
-      orderBy: { [safeSortBy]: sortOrder },
+      orderBy: {
+        [safeSortBy]: sortOrder,
+      },
     }),
     prisma.jobApplication.count(),
   ]);
@@ -54,7 +54,10 @@ export const getApplicationById = async (id: string) => {
   return job;
 };
 
-export const updateApplication = async (id: string, data: any) => {
+export const updateApplication = async (
+  id: string,
+  data: UpdateJobApplicationDTO
+) => {
   await getApplicationById(id);
 
   return prisma.jobApplication.update({
