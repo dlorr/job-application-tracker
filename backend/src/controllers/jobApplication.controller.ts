@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import * as service from "../services/jobApplication.service";
 import { CREATED } from "../constants/http";
+import { PAGINATION } from "../constants/pagination";
+import { SortableField, SortOrder } from "../types/sort";
+import { SORTABLE_FIELDS } from "../constants/sortableFields";
+import { SORT_ORDER } from "../constants/sort";
 
 export const create = async (
   req: Request,
@@ -16,12 +20,13 @@ export const create = async (
 };
 
 export const findAll = async (req: Request, res: Response) => {
-  const page = Number(req.query.page) || 1;
-  const pageSize = Number(req.query.pageSize) || 10;
+  const page = Number(req.query.page) || PAGINATION.DEFAULT_PAGE;
+  const pageSize = Number(req.query.pageSize) || PAGINATION.DEFAULT_PAGE_SIZE;
   const offset = (page - 1) * pageSize;
 
-  const sortBy = (req.query.sortBy as string) || "createdAt";
-  const sortOrder = (req.query.sortOrder as "asc" | "desc") || "desc";
+  const sortBy =
+    (req.query.sortBy as SortableField) || SORTABLE_FIELDS.CREATED_AT;
+  const sortOrder = (req.query.sortOrder as SortOrder) || SORT_ORDER.DESC;
 
   const jobs = await service.getAllApplications({
     offset,
