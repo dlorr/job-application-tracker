@@ -13,6 +13,14 @@ export type ApplicationProgress =
   | "FINAL_INTERVIEW"
   | "JOB_OFFER";
 
+export type SortColumn =
+  | "interviewDate"
+  | "dateCompleted"
+  | "dateApplied"
+  | "createdAt";
+
+export type SortDirection = "asc" | "desc";
+
 export type JobApplication = {
   id: string;
   company: string;

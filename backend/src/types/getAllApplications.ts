@@ -5,4 +5,10 @@ export type GetAllParams = {
   limit: number;
   sortBy: SortableField;
   sortOrder: SortOrder;
+  filters: {
+    company?: string;
+    jobPosition?: string;
+    status?: string;
+    progress?: string;
+  };
 };

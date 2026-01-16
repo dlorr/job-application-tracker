@@ -11,6 +11,7 @@ import {
   deleteApplication,
 } from "../api/jobApplications";
 import type { JobApplication } from "../types/jobApplication";
+import { progressLabels, statusLabels } from "../constants/select";
 
 export default function ApplicationPage() {
   const queryClient = useQueryClient();
@@ -24,10 +25,28 @@ export default function ApplicationPage() {
     "createdAt" | "dateApplied" | "interviewDate" | "dateCompleted"
   >("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [companyFilter, setCompanyFilter] = useState("");
+  const [jobPositionFilter, setJobPositionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [progressFilter, setProgressFilter] = useState<string>("");
+  const [appliedFilters, setAppliedFilters] = useState<{
+    company?: string;
+    jobPosition?: string;
+    status?: string;
+    progress?: string;
+  }>({});
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["applications", page, pageSize, sortBy, sortOrder],
-    queryFn: () => getApplications(page, pageSize, sortBy, sortOrder),
+    queryKey: [
+      "applications",
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
+      appliedFilters,
+    ],
+    queryFn: () =>
+      getApplications(page, pageSize, sortBy, sortOrder, appliedFilters),
   });
 
   const applications = data?.data ?? [];
@@ -41,6 +60,28 @@ export default function ApplicationPage() {
       setSortBy(column);
       setSortOrder("asc");
     }
+    setPage(1);
+  };
+
+  const applyFilters = () => {
+    const filters = {
+      ...(companyFilter.trim() && { company: companyFilter.trim() }),
+      ...(jobPositionFilter.trim() && {
+        jobPosition: jobPositionFilter.trim(),
+      }),
+      ...(statusFilter && { status: statusFilter }),
+      ...(progressFilter && { progress: progressFilter }),
+    };
+
+    setAppliedFilters(filters);
+  };
+
+  const clearFilters = () => {
+    setCompanyFilter("");
+    setJobPositionFilter("");
+    setStatusFilter("");
+    setProgressFilter("");
+    setAppliedFilters({});
     setPage(1);
   };
 
@@ -108,6 +149,68 @@ export default function ApplicationPage() {
           Add Application
         </button>
       </div>
+      {/* Filters */}
+      <div className="mb-4 p-4 border rounded">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          {/* Company */}
+          <input
+            type="text"
+            placeholder="Company"
+            value={companyFilter}
+            onChange={(e) => setCompanyFilter(e.target.value)}
+            className="border px-3 py-2 rounded"
+          />
+
+          {/* Job Position */}
+          <input
+            type="text"
+            placeholder="Job Position"
+            value={jobPositionFilter}
+            onChange={(e) => setJobPositionFilter(e.target.value)}
+            className="border px-3 py-2 rounded"
+          />
+
+          {/* Status */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="border px-3 py-2 rounded"
+          >
+            <option value="">All Status</option>
+            {Object.entries(statusLabels).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+
+          {/* Progress */}
+          <select
+            value={progressFilter}
+            onChange={(e) => setProgressFilter(e.target.value)}
+            className="border px-3 py-2 rounded"
+          >
+            <option value="">All Progress</option>
+            {Object.entries(progressLabels).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Filter actions */}
+        <div className="flex gap-2 justify-end">
+          <button onClick={clearFilters} className="button-secondary px-4 py-2">
+            Clear Filters
+          </button>
+
+          <button onClick={applyFilters} className="button-primary px-4 py-2">
+            Apply Filters
+          </button>
+        </div>
+      </div>
+
       <ApplicationTable
         applications={applications}
         isLoading={isLoading || isFetching}

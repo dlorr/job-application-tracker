@@ -1,20 +1,19 @@
-import type { JobApplication } from "../types/jobApplication";
+import type {
+  JobApplication,
+  SortColumn,
+  SortDirection,
+} from "../types/jobApplication";
 import { statusLabels, progressLabels } from "../constants/select";
 import { getJobLinkLabel } from "../utils/jobLink";
 import { statusColors } from "../constants/statusColors";
 
-type SortColumn =
-  | "interviewDate"
-  | "dateCompleted"
-  | "dateApplied"
-  | "createdAt";
 type Props = {
   applications: JobApplication[];
   isLoading: boolean;
   onEdit: (app: JobApplication) => void;
   onDelete: (app: JobApplication) => void;
   sortBy: string;
-  sortOrder: "asc" | "desc";
+  sortOrder: SortDirection;
   onSort: (column: SortColumn) => void;
 };
 
