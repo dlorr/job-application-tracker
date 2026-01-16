@@ -5,7 +5,7 @@ const baseString = z.string().trim().min(1).max(255);
 export const createJobSchema = z.object({
   company: baseString,
   jobPosition: baseString,
-  jobLink: z.string().trim().min(1).max(500),
+  jobLink: z.string().trim().min(1).max(1000),
   dateApplied: z.coerce.date().min(1, "Date applied is required"),
 });
 

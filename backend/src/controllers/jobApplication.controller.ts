@@ -28,11 +28,19 @@ export const findAll = async (req: Request, res: Response) => {
     (req.query.sortBy as SortableField) || SORTABLE_FIELDS.CREATED_AT;
   const sortOrder = (req.query.sortOrder as SortOrder) || SORT_ORDER.DESC;
 
+  const filters = {
+    company: req.query.company as string | undefined,
+    jobPosition: req.query.jobPosition as string | undefined,
+    status: req.query.status as string | undefined,
+    progress: req.query.progress as string | undefined,
+  };
+
   const jobs = await service.getAllApplications({
     offset,
     limit: pageSize,
     sortBy,
     sortOrder,
+    filters,
   });
   res.json(jobs);
 };

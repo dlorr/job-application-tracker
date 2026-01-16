@@ -4,8 +4,8 @@ import { NOT_FOUND } from "../constants/http";
 import { GetAllParams } from "../types/getAllApplications";
 import { SORTABLE_FIELDS } from "../constants/sortableFields";
 import { CreateJobApplicationDTO } from "../dtos/createJobApplication.dto";
-import { Prisma } from "@prisma/client";
 import { UpdateJobApplicationDTO } from "../dtos/updateJobApplication.dto";
+import { Prisma } from "../../generated/prisma/client";
 
 export const createApplication = (data: CreateJobApplicationDTO) => {
   return prisma.jobApplication.create({
@@ -18,6 +18,7 @@ export const getAllApplications = async ({
   limit,
   sortBy,
   sortOrder,
+  filters,
 }: GetAllParams) => {
   const allowedSortFields = Object.values(SORTABLE_FIELDS);
 
@@ -25,15 +26,33 @@ export const getAllApplications = async ({
     ? sortBy
     : SORTABLE_FIELDS.CREATED_AT;
 
+  const where: Prisma.JobApplicationWhereInput = {
+    ...(filters.company && {
+      company: {
+        contains: filters.company,
+        mode: "insensitive",
+      },
+    }),
+    ...(filters.jobPosition && {
+      jobPosition: {
+        contains: filters.jobPosition,
+        mode: "insensitive",
+      },
+    }),
+    ...(filters.status && { status: filters.status as any }),
+    ...(filters.progress && { progress: filters.progress as any }),
+  };
+
   const [data, total] = await Promise.all([
     prisma.jobApplication.findMany({
       skip: offset,
       take: limit,
+      where,
       orderBy: {
         [safeSortBy]: sortOrder,
       },
     }),
-    prisma.jobApplication.count(),
+    prisma.jobApplication.count({ where }),
   ]);
 
   return {

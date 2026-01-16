@@ -14,10 +14,16 @@ export const getApplications = async (
   page: number,
   pageSize: number,
   sortBy = "createdAt",
-  sortOrder: "asc" | "desc" = "desc"
+  sortOrder: "asc" | "desc" = "desc",
+  filters: {
+    status?: string;
+    progress?: string;
+    company?: string;
+    jobPosition?: string;
+  }
 ) => {
   const res = await api.get("/", {
-    params: { page, pageSize, sortBy, sortOrder },
+    params: { page, pageSize, sortBy, sortOrder, ...filters },
   });
 
   return res.data as {

@@ -13,7 +13,7 @@ export const applicationSchema = z
   .object({
     company: z.string().min(1, "Company is required").max(255),
     jobPosition: z.string().min(1, "Job Position is required").max(255),
-    jobLink: z.string().min(1, "Job Link is required").max(500),
+    jobLink: z.string().min(1, "Job Link is required").max(1000),
     dateApplied: z.string().min(1, "Date applied is required"),
     status: z
       .enum([
