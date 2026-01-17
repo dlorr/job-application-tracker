@@ -1,5 +1,10 @@
 import axios from "axios";
-import type { JobApplication } from "../types/jobApplication";
+import type {
+  ApplicationProgress,
+  ApplicationStatus,
+  JobApplication,
+  SortColumn,
+} from "../types/jobApplication";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4003/api";
 
@@ -13,11 +18,11 @@ export const api = axios.create({
 export const getApplications = async (
   page: number,
   pageSize: number,
-  sortBy = "createdAt",
+  sortBy: SortColumn,
   sortOrder: "asc" | "desc" = "desc",
   filters: {
-    status?: string;
-    progress?: string;
+    status?: ApplicationStatus;
+    progress?: ApplicationProgress;
     company?: string;
     jobPosition?: string;
   }

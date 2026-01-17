@@ -10,7 +10,12 @@ import {
   updateApplication,
   deleteApplication,
 } from "../api/jobApplications";
-import type { JobApplication } from "../types/jobApplication";
+import type {
+  ApplicationProgress,
+  ApplicationStatus,
+  JobApplication,
+  SortColumn,
+} from "../types/jobApplication";
 import { progressLabels, statusLabels } from "../constants/select";
 
 export default function ApplicationPage() {
@@ -21,19 +26,20 @@ export default function ApplicationPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [sortBy, setSortBy] = useState<
-    "createdAt" | "dateApplied" | "interviewDate" | "dateCompleted"
-  >("createdAt");
+  const [sortBy, setSortBy] = useState<SortColumn>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [companyFilter, setCompanyFilter] = useState("");
   const [jobPositionFilter, setJobPositionFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("");
-  const [progressFilter, setProgressFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<ApplicationStatus | null>(
+    null
+  );
+  const [progressFilter, setProgressFilter] =
+    useState<ApplicationProgress | null>(null);
   const [appliedFilters, setAppliedFilters] = useState<{
     company?: string;
     jobPosition?: string;
-    status?: string;
-    progress?: string;
+    status?: ApplicationStatus;
+    progress?: ApplicationProgress;
   }>({});
 
   const { data, isLoading, isFetching } = useQuery({
@@ -79,8 +85,8 @@ export default function ApplicationPage() {
   const clearFilters = () => {
     setCompanyFilter("");
     setJobPositionFilter("");
-    setStatusFilter("");
-    setProgressFilter("");
+    setStatusFilter(null);
+    setProgressFilter(null);
     setAppliedFilters({});
     setPage(1);
   };
@@ -172,8 +178,12 @@ export default function ApplicationPage() {
 
           {/* Status */}
           <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            value={statusFilter ?? ""}
+            onChange={(e) =>
+              setStatusFilter(
+                e.target.value ? (e.target.value as ApplicationStatus) : null
+              )
+            }
             className="border px-3 py-2 rounded"
           >
             <option value="">All Status</option>
@@ -186,8 +196,12 @@ export default function ApplicationPage() {
 
           {/* Progress */}
           <select
-            value={progressFilter}
-            onChange={(e) => setProgressFilter(e.target.value)}
+            value={progressFilter ?? ""}
+            onChange={(e) =>
+              setProgressFilter(
+                e.target.value ? (e.target.value as ApplicationProgress) : null
+              )
+            }
             className="border px-3 py-2 rounded"
           >
             <option value="">All Progress</option>

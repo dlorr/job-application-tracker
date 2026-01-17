@@ -12,7 +12,7 @@ type Props = {
   isLoading: boolean;
   onEdit: (app: JobApplication) => void;
   onDelete: (app: JobApplication) => void;
-  sortBy: string;
+  sortBy: SortColumn;
   sortOrder: SortDirection;
   onSort: (column: SortColumn) => void;
 };

@@ -2,7 +2,7 @@ type Props = {
   message: string;
   onConfirm: () => void;
   onClose: () => void;
-  isLoading: boolean; // ✅ Add this prop
+  isLoading: boolean;
 };
 
 export default function ConfirmModal({
