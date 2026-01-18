@@ -33,6 +33,8 @@ export default function ApplicationTable({
       month: "short",
       day: "numeric",
       year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
     });
   };
   return (
@@ -50,7 +52,7 @@ export default function ApplicationTable({
               className="cursor-pointer select-none"
               onClick={() => onSort("interviewDate")}
             >
-              Interview Date{" "}
+              Interview Schedule{" "}
               {sortBy === "interviewDate" ? (
                 sortOrder === "asc" ? (
                   <span>↑</span>
@@ -66,7 +68,7 @@ export default function ApplicationTable({
               className="cursor-pointer select-none"
               onClick={() => onSort("dateCompleted")}
             >
-              Completed Date{" "}
+              Date Completed{" "}
               {sortBy === "dateCompleted" ? (
                 sortOrder === "asc" ? (
                   <span>↑</span>
@@ -81,7 +83,7 @@ export default function ApplicationTable({
               className="cursor-pointer select-none"
               onClick={() => onSort("dateApplied")}
             >
-              Applied Date{" "}
+              Date Applied{" "}
               {sortBy === "dateApplied" ? (
                 sortOrder === "asc" ? (
                   <span>↑</span>

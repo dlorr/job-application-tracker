@@ -97,6 +97,15 @@ export default function ApplicationModal({
   const prevStatusRef = useRef<ApplicationStatus | undefined>(undefined);
   const statusValue = watch("status");
 
+  const toDateTimeLocal = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
+      d.getDate(),
+    )}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
   useEffect(() => {
     if (application) {
       reset({
@@ -105,7 +114,9 @@ export default function ApplicationModal({
         jobLink: application.jobLink,
         status: application.status,
         progress: application.progress || undefined,
-        interviewDate: application.interviewDate?.split("T")[0] || undefined,
+        interviewDate: application.interviewDate
+          ? toDateTimeLocal(application.interviewDate)
+          : undefined,
         dateApplied: application.dateApplied?.split("T")[0],
         dateCompleted: application.dateCompleted?.split("T")[0] || undefined,
         hasForm: application.hasForm,
@@ -196,7 +207,7 @@ export default function ApplicationModal({
                         month: "short",
                         day: "numeric",
                         year: "numeric",
-                      }
+                      },
                     )
                   : ""
               }
@@ -245,7 +256,7 @@ export default function ApplicationModal({
 
                   <label className="text-sm font-medium">Interview Date</label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     {...register("interviewDate")}
                     className="mb-2"
                   />
@@ -305,8 +316,8 @@ export default function ApplicationModal({
                   ? "Updating..."
                   : "Adding..."
                 : isEditing
-                ? "Update"
-                : "Add"}
+                  ? "Update"
+                  : "Add"}
             </button>
           </div>
         </form>
